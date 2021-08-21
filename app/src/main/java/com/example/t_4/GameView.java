@@ -29,8 +29,7 @@ public class GameView<birds> extends SurfaceView implements Runnable {
     private SharedPreferences prefs;
     private Random random;
     private SoundPool soundPool;
-    //    private List<Bullet> bullets;
-//    private int sound;
+
     private Flight flight;
     private GameActivity activity;
     private Background background1, background2;
@@ -43,22 +42,6 @@ public class GameView<birds> extends SurfaceView implements Runnable {
         prefs = activity.getSharedPreferences("game", Context.MODE_PRIVATE);
 
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//
-//            AudioAttributes audioAttributes = new AudioAttributes.Builder()
-//                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-//                    .setUsage(AudioAttributes.USAGE_GAME)
-//                    .build();
-//
-//            soundPool = new SoundPool.Builder()
-//                    .setAudioAttributes(audioAttributes)
-//                    .build();
-//
-//        } else
-//            soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
-//
-//        sound = soundPool.load(activity, R.raw.shoot, 1);
-
         this.screenX = screenX;
         this.screenY = screenY;
         screenRatioX = 1920f / screenX;
@@ -68,8 +51,6 @@ public class GameView<birds> extends SurfaceView implements Runnable {
         background2 = new Background(screenX, screenY, getResources());
 
         flight = new Flight(this, screenY, getResources());
-
-//        bullets = new ArrayList<>();
 
         background2.x = screenX;
 
@@ -128,14 +109,6 @@ public class GameView<birds> extends SurfaceView implements Runnable {
         if (flight.y >= screenY - flight.height)
             flight.y = screenY - flight.height;
 
-//        List<Bullet> trash = new ArrayList<>();
-
-//        for (Bullet bullet : bullets) {
-//
-//            if (bullet.x > screenX)
-//                trash.add(bullet);
-//
-//            bullet.x += 50 * screenRatioX;
         for (Bird bird : birds) {
 
             bird.x -= bird.speed;
@@ -160,45 +133,6 @@ public class GameView<birds> extends SurfaceView implements Runnable {
             }
 
 
-//        for (Bird bird : birds) {
-//
-//            if (Rect.intersects(bird.getCollisionShape(),
-//                    bullet.getCollisionShape())) {
-//
-//                score++;
-//                bird.x = -500;
-//                bullet.x = screenX + 500;
-//                bird.wasShot = true;
-//
-//            }
-//
-//        }
-
-
-//        for (Bullet bullet : trash)
-//            bullets.remove(bullet);
-
-//        for (Bird bird : birds) {
-//
-//            bird.x -= bird.speed;
-//
-//            if (bird.x + bird.width < 0) {
-//
-//                if (!bird.wasShot) {
-//                    isGameOver = true;
-//                    return;
-//                }
-
-//                int bound = (int) (30 * screenRatioX);
-//                bird.speed = random.nextInt(bound);
-//
-//                if (bird.speed < 10 * screenRatioX)
-//                    bird.speed = (int) (10 * screenRatioX);
-//
-//                bird.x = screenX;
-//                bird.y = random.nextInt(screenY - bird.height);
-//
-//                bird.wasShot = false;
             }
 
         }
@@ -228,9 +162,6 @@ public class GameView<birds> extends SurfaceView implements Runnable {
             }
 
             canvas.drawBitmap(flight.getFlight(), flight.x, flight.y, paint);
-
-//            for (Bullet bullet : bullets)
-//                canvas.drawBitmap(bullet.bullet, bullet.x, bullet.y, paint);
 
             getHolder().unlockCanvasAndPost(canvas);
 
@@ -306,17 +237,5 @@ public class GameView<birds> extends SurfaceView implements Runnable {
         }
 
         return true;
-//    }
-
-//    public void newBullet() {
-//
-//        if (!prefs.getBoolean("isMute", false))
-//            soundPool.play(sound, 1, 1, 0, 0, 1);
-//
-//        Bullet bullet = new Bullet(getResources());
-//        bullet.x = flight.x + flight.width;
-//        bullet.y = flight.y + (flight.height / 2);
-//        bullets.add(bullet);
-//
 }}
 

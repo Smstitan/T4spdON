@@ -18,8 +18,6 @@ public class Bird {
 
         bird1 = BitmapFactory.decodeResource(res, R.drawable.wall1);
         bird2 = BitmapFactory.decodeResource(res, R.drawable.wall2);
-//        bird3 = BitmapFactory.decodeResource(res, R.drawable.bird3);
-//        bird4 = BitmapFactory.decodeResource(res, R.drawable.bird4);
 
         width = bird1.getWidth();
         height = bird1.getHeight();
@@ -32,8 +30,6 @@ public class Bird {
 
         bird1 = Bitmap.createScaledBitmap(bird1, width, height, false);
         bird2 = Bitmap.createScaledBitmap(bird2, width, height, false);
-//        bird3 = Bitmap.createScaledBitmap(bird3, width, height, false);
-//        bird4 = Bitmap.createScaledBitmap(bird4, width, height, false);
 
         y = height * 5;
     }
@@ -44,17 +40,6 @@ public class Bird {
             birdCounter++;
             return bird1;
         }
-//
-//        if (birdCounter == 2) {
-//            birdCounter++;
-//            return bird2;
-//        }
-//
-//        if (birdCounter == 3) {
-//            birdCounter++;
-//            return bird3;
-//        }
-//
     return bird2;
     }
 
