@@ -18,19 +18,19 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class GameView<birds> extends SurfaceView implements Runnable {
+public class GameView<walls> extends SurfaceView implements Runnable {
 
     private Thread thread;
     private boolean isPlaying, isGameOver = false;
     private int screenX, screenY, score = 0;
     public static float screenRatioX, screenRatioY;
     private Paint paint;
-    private Bird[] birds;
+    private Wall[] walls;
     private SharedPreferences prefs;
     private Random random;
     private SoundPool soundPool;
 
-    private Flight flight;
+    private Crush crush;
     private GameActivity activity;
     private Background background1, background2;
 
@@ -50,7 +50,7 @@ public class GameView<birds> extends SurfaceView implements Runnable {
         background1 = new Background(screenX, screenY, getResources());
         background2 = new Background(screenX, screenY, getResources());
 
-        flight = new Flight(this, screenY, getResources());
+        crush = new Crush(this, screenY, getResources());
 
         background2.x = screenX;
 
@@ -58,12 +58,12 @@ public class GameView<birds> extends SurfaceView implements Runnable {
         paint.setTextSize(128);
         paint.setColor(Color.WHITE);
 
-        birds = new Bird[2];
+        walls = new Wall[2];
 
         for (int i = 0; i < 2; i++) {
 
-            Bird bird = new Bird(getResources());
-            birds[i] = bird;
+            Wall wall = new Wall(getResources());
+            walls[i] = wall;
 
         }
 
@@ -96,38 +96,38 @@ public class GameView<birds> extends SurfaceView implements Runnable {
         if (background2.x + background2.background.getWidth() < 0) {
             background2.x = screenX;
         }
-        double a = flight.y;
+        double a = crush.y;
 
-        if (flight.isGoingUp)
-            flight.y -= 60 * screenRatioY;
+        if (crush.isGoingUp)
+            crush.y -= 60 * screenRatioY;
         else
-            flight.y += 45 * screenRatioY;
+            crush.y += 45 * screenRatioY;
 
-        if (flight.y < 0)
-            flight.y = 0;
+        if (crush.y < 0)
+            crush.y = 0;
 
-        if (flight.y >= screenY - flight.height)
-            flight.y = screenY - flight.height;
+        if (crush.y >= screenY - crush.height)
+            crush.y = screenY - crush.height;
 
-        for (Bird bird : birds) {
+        for (Wall wall : walls) {
 
-            bird.x -= bird.speed;
-            if (bird.x < 0) {
+            wall.x -= wall.speed;
+            if (wall.x < 0) {
                 score++;
             }
 
-            if (bird.x + bird.width < 0) {
+            if (wall.x + wall.width < 0) {
 
                 int bound = (int) (30 * screenRatioX);
-                bird.speed = random.nextInt(bound);
+                wall.speed = random.nextInt(bound);
 
-                if (bird.speed < -10 * screenRatioX)
-                    bird.speed = (int) (-10 * screenRatioX);
+                if (wall.speed < -10 * screenRatioX)
+                    wall.speed = (int) (-10 * screenRatioX);
 
-                bird.x = random.nextInt(screenX);
-                bird.y = random.nextInt(screenY - bird.height);
+                wall.x = random.nextInt(screenX);
+                wall.y = random.nextInt(screenY - wall.height);
             }
-            if (Rect.intersects(bird.getCollisionShape(), flight.getCollisionShape())) {
+            if (Rect.intersects(wall.getCollisionShape(), crush.getCollisionShape())) {
                     isGameOver = true;
                     return;
             }
@@ -147,21 +147,21 @@ public class GameView<birds> extends SurfaceView implements Runnable {
             canvas.drawBitmap(background1.background, background1.x, background1.y, paint);
             canvas.drawBitmap(background2.background, background2.x, background2.y, paint);
 
-            for (Bird bird : birds)
-                canvas.drawBitmap(bird.getBird(), bird.x, bird.y, paint);
+            for (Wall wall : walls)
+                canvas.drawBitmap(wall.getWall(), wall.x, wall.y, paint);
 
             canvas.drawText(score + "", screenX / 2f, 164, paint);
 
             if (isGameOver) {
                 isPlaying = false;
-                canvas.drawBitmap(flight.getDead(), flight.x, flight.y, paint);
+                canvas.drawBitmap(crush.getDead(), crush.x, crush.y, paint);
                 getHolder().unlockCanvasAndPost(canvas);
                 saveIfHighScore();
                 waitBeforeExiting();
                 return;
             }
 
-            canvas.drawBitmap(flight.getFlight(), flight.x, flight.y, paint);
+            canvas.drawBitmap(crush.getCrush(), crush.x, crush.y, paint);
 
             getHolder().unlockCanvasAndPost(canvas);
 
@@ -225,11 +225,11 @@ public class GameView<birds> extends SurfaceView implements Runnable {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (event.getX() < screenX / 2) {
-                    flight.isGoingUp = true;
+                    crush.isGoingUp = true;
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                flight.isGoingUp = false;
+                crush.isGoingUp = false;
                 if (event.getX() > screenX / 2){
 
                 }
